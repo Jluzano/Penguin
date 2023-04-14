@@ -5,14 +5,16 @@ from PIL import ImageTk,Image
 root = Tk()
 img = Image.open("background.png")
 img2 = ImageTk.PhotoImage(img)
-canvas = Canvas(root, width = 500, height = 500)
+canvas = Canvas(root)
 canvas.pack(fill="both", expand=TRUE)
 canvas.create_image(0, 0, image = img2, anchor="nw")
 
-#Initializing penguin
+#Initializing penguin & position
+posx = 0
+posy = 0
 penguin = Image.open("idle/0.png")
 penguin2 = ImageTk.PhotoImage(penguin)
-sprite = canvas.create_image(10, 10, anchor=NW, image=penguin2)
+sprite = canvas.create_image(posx, posy, anchor='nw', image=penguin2)
 
 #Arrays to store images for penguin sprites
 idle = ["idle/0.png", "idle/1.png", "idle/2.png", "idle/3.png", "idle/4.png", 
@@ -24,8 +26,25 @@ walkS = ["walk_S/0.png", "walk_S/1.png", "walk_S/2.png", "walk_S/3.png"]
 walkW = ["walk_W/0.png", "walk_W/1.png", "walk_W/2.png", "walk_W/3.png"]
 
 
-def move():
-    print("yay")
+def up(event):
+    x = 0
+    y = -20
+    canvas.move(sprite, x, y)
+
+def down(event):
+    x = 0
+    y = 20
+    canvas.move(sprite, x, y)
+
+def left(event):
+    x = -20
+    y = 0
+    canvas.move(sprite, x, y)
+
+def right(event):
+    x = 20
+    y = 0
+    canvas.move(sprite, x, y)
 
 
 # Initializing the background image and the game window
@@ -34,5 +53,8 @@ root.title("Penguin Game")
 ico = Image.open("idle/0.png")
 photo = ImageTk.PhotoImage(ico)
 root.wm_iconphoto(False, photo)
-root.bind("<Key>", move)
+root.bind("<Up>", up)
+root.bind("<Down>", down)
+root.bind("<Left>", left)
+root.bind("<Right>", right)
 root.mainloop()
