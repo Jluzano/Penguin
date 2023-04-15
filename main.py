@@ -1,7 +1,7 @@
 from tkinter import *
 from PIL import ImageTk,Image
 
-#Declaring background
+#Declaring background image
 root = Tk()
 img = Image.open("background.png")
 img2 = ImageTk.PhotoImage(img)
@@ -37,23 +37,36 @@ class Penguin:
         self.sprites = sprites
         self.sprite_index = 0
         self.sprite = canvas.create_image(x, y, anchor='nw', image=sprites[0])
-        self.isIdle = TRUE
+        self.isIdle = TRUE #Penguin is not moving by default
 
+    #Update the penguin's sprite depending on if it is moving or not
     def update_sprite(self):
+        #If the penguin is not moving
         if self.isIdle:
             self.sprite_index += 1
+            #This allows the sprite_index to loop back to the start
             self.sprite_index = self.sprite_index % len(idle)
+            #This line changes the sprite of the penguin to the next frame
             self.canvas.itemconfig(self.sprite, image=idle_list[self.sprite_index])
         else:
+            #If the penguin is moving
             self.sprite_index += 1
             self.sprite_index = self.sprite_index % len(self.sprites)
             self.canvas.itemconfig(self.sprite, image=self.sprites[self.sprite_index])
 
+    #Function for actually moving the sprite across the screen
+    #First, moves the sprite
+    #Next, sets its own sprite to the sprite depending on the direction
+    #Then, it updates the sprite to the next frame
+    #Last, it sets isIdle to true
     def move(self, x, y, sprites):
         self.canvas.move(self.sprite, x, y)
         self.sprites = sprites
         self.update_sprite()
         self.isIdle = TRUE
+
+#Declaring Penguin object
+penguin = Penguin(canvas, posx, posy, [ImageTk.PhotoImage(Image.open(image)) for image in idle])
 
 def up(event):
     x = 0
@@ -75,13 +88,25 @@ def right(event):
     y = 0
     canvas.move(sprite, x, y)
 
+#Checking if the penguin is moving or not
+def animate_idle():
+    if penguin.isIdle:
+        penguin.update_sprite()
+    #Repeat this every half a second
+    root.after(500, animate_idle)
 
-# Initializing the background image and the game window
+#Penguin starts out in the idle animation
+animate_idle()
+
+#Stretches the background to fit the window height + width
 root.geometry('{}x{}'.format(img2.width(), img2.height()))
+#Changes the name of the window
 root.title("Penguin Game")
+#These lines change the icon in the corner of the window
 ico = Image.open("idle/0.png")
 photo = ImageTk.PhotoImage(ico)
 root.wm_iconphoto(False, photo)
+#Binding keys to functions
 root.bind("<Up>", up)
 root.bind("<Down>", down)
 root.bind("<Left>", left)
