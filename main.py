@@ -9,11 +9,6 @@ canvas = Canvas(root)
 canvas.pack(fill="both", expand=TRUE)
 canvas.create_image(0, 0, image = img2, anchor="nw")
 
-#Initializing penguin & position
-posx = 0
-posy = 0
-speed = 20
-
 #Arrays to store images for penguin sprites
 idle = ["idle/0.png", "idle/1.png", "idle/2.png", "idle/3.png", "idle/4.png", 
         "idle/5.png", "idle/6.png", "idle/7.png", "idle/8.png", "idle/9.png", 
@@ -40,6 +35,10 @@ class Penguin:
         self.sprite_index = 0
         self.sprite = canvas.create_image(x, y, anchor='nw', image=sprites[0])
         self.isIdle = TRUE #Penguin is not moving by default
+        #Initializing penguin & position
+        self.posx = 0
+        self.posy = 0
+        self.speed = 20
 
     #Update the penguin's sprite depending on if it is moving or not
     def update_sprite(self):
@@ -68,8 +67,8 @@ class Penguin:
         self.update_sprite()
         self.isIdle = TRUE
 
-#Declaring Penguin object
-penguin = Penguin(canvas, posx, posy, [ImageTk.PhotoImage(Image.open(image)) for image in idle])
+#Declaring Penguin object at (0, 0)
+penguin = Penguin(canvas, 0, 0, [ImageTk.PhotoImage(Image.open(image)) for image in idle])
 
 #Function to convert the arrays of images into PhotoImages
 #Also to reduce lines of code since its used in all 4 movement functions
@@ -80,31 +79,48 @@ def loop(array, direction):
         array.append(photo_obj)
 
 def up(event):
+    #Temporary variable for location checking
+    temp = penguin.posy - penguin.speed
     #Array of new images
     image_list = []
     #Go through array of respective direction and add it to the new array
     loop(image_list, walkN)
-    #Move the penguin which also updates its sprite
-    penguin.move(0, -speed, image_list)
+    #Checking if the penguin is at the top of the screen
+    if temp < 0:
+        penguin.move(0, 0, image_list)
+        print(penguin.posy)
+    else:
+        #Move the penguin which also updates its sprite
+        penguin.move(0, -penguin.speed, image_list)
+        penguin.posy = temp
+        print(penguin.posy)
     #Idle animation plays
     penguin.isIdle = TRUE
 
 def down(event):
+    temp = penguin.posy + penguin.speed
     image_list = []
     loop(image_list, walkS)
-    penguin.move(0, speed, image_list)
+    #760 is the maximum that the penguin can go downwards
+    if temp > 760:
+        penguin.move(0, 0, image_list)
+        print(penguin.posy)
+    else:
+        penguin.move(0, penguin.speed, image_list)
+        penguin.posy = temp
+        print(penguin.posy)
     penguin.isIdle = TRUE
 
 def left(event):
     image_list = []
     loop(image_list, walkW)
-    penguin.move(-speed, 0, image_list)
+    penguin.move(-penguin.speed, 0, image_list)
     penguin.isIdle = TRUE
 
 def right(event):
     image_list = []
     loop(image_list, walkE)
-    penguin.move(speed, 0, image_list)
+    penguin.move(penguin.speed, 0, image_list)
     penguin.isIdle = TRUE
 
 #Checking if the penguin is moving or not
