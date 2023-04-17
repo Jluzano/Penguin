@@ -12,6 +12,7 @@ canvas.create_image(0, 0, image = img2, anchor="nw")
 #Initializing penguin & position
 posx = 0
 posy = 0
+speed = 20
 
 #Arrays to store images for penguin sprites
 idle = ["idle/0.png", "idle/1.png", "idle/2.png", "idle/3.png", "idle/4.png", 
@@ -60,6 +61,7 @@ class Penguin:
     #Then, it updates the sprite to the next frame
     #Last, it sets isIdle to true
     def move(self, x, y, sprites):
+        self.isIdle = FALSE
         self.canvas.move(self.sprite, x, y)
         self.sprites = sprites
         self.update_sprite()
@@ -68,25 +70,35 @@ class Penguin:
 #Declaring Penguin object
 penguin = Penguin(canvas, posx, posy, [ImageTk.PhotoImage(Image.open(image)) for image in idle])
 
+def loop(array, direction):
+    for image in direction:
+        image_obj = Image.open(image)
+        photo_obj = ImageTk.PhotoImage(image_obj)
+        array.append(photo_obj)
+
 def up(event):
-    x = 0
-    y = -20
-    canvas.move(sprite, x, y)
+    image_list = []
+    loop(image_list, walkN)
+    penguin.move(0, -speed, image_list)
+    penguin.isIdle = TRUE
 
 def down(event):
-    x = 0
-    y = 20
-    canvas.move(sprite, x, y)
+    image_list = []
+    loop(image_list, walkS)
+    penguin.move(0, speed, image_list)
+    penguin.isIdle = TRUE
 
 def left(event):
-    x = -20
-    y = 0
-    canvas.move(sprite, x, y)
+    image_list = []
+    loop(image_list, walkW)
+    penguin.move(-speed, 0, image_list)
+    penguin.isIdle = TRUE
 
 def right(event):
-    x = 20
-    y = 0
-    canvas.move(sprite, x, y)
+    image_list = []
+    loop(image_list, walkE)
+    penguin.move(speed, 0, image_list)
+    penguin.isIdle = TRUE
 
 #Checking if the penguin is moving or not
 def animate_idle():
