@@ -86,14 +86,12 @@ def up(event):
     #Go through array of respective direction and add it to the new array
     loop(image_list, walkN)
     #Checking if the penguin is at the top of the screen
-    if temp < 0:
-        penguin.move(0, 0, image_list)
-        print(penguin.posy)
-    else:
-        #Move the penguin which also updates its sprite
+    if temp >= 0:
+        #Moving the penguin
         penguin.move(0, -penguin.speed, image_list)
         penguin.posy = temp
-        print(penguin.posy)
+        #Displays the penguin's updated position
+        print("x: " + str(penguin.posx) + "\ty: " + str(penguin.posy))
     #Idle animation plays
     penguin.isIdle = TRUE
 
@@ -102,25 +100,30 @@ def down(event):
     image_list = []
     loop(image_list, walkS)
     #760 is the maximum that the penguin can go downwards
-    if temp > 760:
-        penguin.move(0, 0, image_list)
-        print(penguin.posy)
-    else:
+    if temp <= 760:
         penguin.move(0, penguin.speed, image_list)
         penguin.posy = temp
-        print(penguin.posy)
+        print("x: " + str(penguin.posx) + "\ty: " + str(penguin.posy))
     penguin.isIdle = TRUE
 
 def left(event):
+    temp = penguin.posx - penguin.speed
     image_list = []
     loop(image_list, walkW)
-    penguin.move(-penguin.speed, 0, image_list)
+    if temp >= 0:
+        penguin.move(-penguin.speed, 0, image_list)
+        penguin.posx = temp
+        print("x: " + str(penguin.posx) + "\ty: " + str(penguin.posy))
     penguin.isIdle = TRUE
 
 def right(event):
+    temp = penguin.posx + penguin.speed
     image_list = []
     loop(image_list, walkE)
-    penguin.move(penguin.speed, 0, image_list)
+    if temp <= 1420:
+        penguin.move(penguin.speed, 0, image_list)
+        penguin.posx = temp
+        print("x: " + str(penguin.posx) + "\ty: " + str(penguin.posy))
     penguin.isIdle = TRUE
 
 #Checking if the penguin is moving or not
