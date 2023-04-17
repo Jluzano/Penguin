@@ -34,6 +34,7 @@ for image in idle:
 #Creating the Penguin class
 class Penguin:
     def __init__(self, canvas, x, y, sprites):
+        #Creating penguin and placing it onto the canvas
         self.canvas = canvas
         self.sprites = sprites
         self.sprite_index = 0
@@ -70,6 +71,8 @@ class Penguin:
 #Declaring Penguin object
 penguin = Penguin(canvas, posx, posy, [ImageTk.PhotoImage(Image.open(image)) for image in idle])
 
+#Function to convert the arrays of images into PhotoImages
+#Also to reduce lines of code since its used in all 4 movement functions
 def loop(array, direction):
     for image in direction:
         image_obj = Image.open(image)
@@ -77,9 +80,13 @@ def loop(array, direction):
         array.append(photo_obj)
 
 def up(event):
+    #Array of new images
     image_list = []
+    #Go through array of respective direction and add it to the new array
     loop(image_list, walkN)
+    #Move the penguin which also updates its sprite
     penguin.move(0, -speed, image_list)
+    #Idle animation plays
     penguin.isIdle = TRUE
 
 def down(event):
