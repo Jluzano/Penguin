@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import ImageTk,Image
+from tkinter import messagebox
 
 #Declaring background image
 root = Tk()
@@ -75,9 +76,16 @@ class Penguin:
         #Repeat this every half a second
         root.after(500, self.animate_idle)
 
-#Declaring Penguin object at (0, 0)
+#Declaring Penguin object at (0, 0) and penguin2 object at (1000, 420)
 penguin = Penguin(canvas, 0, 0, [ImageTk.PhotoImage(Image.open(image)) for image in idle])
 penguin2 = Penguin(canvas, 1000, 420, [ImageTk.PhotoImage(Image.open(image)) for image in idle])
+
+#Popup notification when you interact with the other penguin
+def popup():
+    pop = messagebox.showinfo("Notification", "Ouch.")
+    if pop == "ok":
+        return NONE
+    Label(root, text=pop).pack()
 
 #Function to convert the arrays of images into PhotoImages
 #Also to reduce lines of code since its used in all 4 movement functions
@@ -88,17 +96,19 @@ def loop(array, direction):
         array.append(photo_obj)
 
 def up(event):
-    #Temporary variable for location checking
+    #Temporary variables for location checking
     tempx = penguin.posx
     tempy = penguin.posy - penguin.speed
     #Array of new images
     image_list = []
     #Go through array of respective direction and add it to the new array
     loop(image_list, walkN)
-    #
+    #If it is anticipated that you will be in the boundary of the other penguin, call the popup() function.
+    #Penguin2's boundary is x: 840 -> 1160
+    #                       y: 320 -> 540
     if (tempx >= 840 and tempx <= 1160) and (tempy >= 320 and tempy <= 540):
         penguin.move(0, 0, image_list)
-        print("help!")
+        popup()
     #Checking if the penguin is at the top of the screen
     elif tempy >= 0:
         #Moving the penguin
@@ -114,10 +124,9 @@ def down(event):
     tempy = penguin.posy + penguin.speed
     image_list = []
     loop(image_list, walkS)
-    #
     if (tempx >= 840 and tempx <= 1160) and (tempy >= 320 and tempy <= 540):
         penguin.move(0, 0, image_list)
-        print("help!")
+        popup()
     #760 is the maximum that the penguin can go downwards
     elif tempy <= 760:
         penguin.move(0, penguin.speed, image_list)
@@ -132,7 +141,7 @@ def left(event):
     loop(image_list, walkW)
     if (tempx >= 840 and tempx <= 1160) and (tempy >= 320 and tempy <= 540):
         penguin.move(0, 0, image_list)
-        print("help!")
+        popup()
     elif tempx >= 0:
         penguin.move(-penguin.speed, 0, image_list)
         penguin.posx = tempx
@@ -146,7 +155,7 @@ def right(event):
     loop(image_list, walkE)
     if (tempx >= 840 and tempx <= 1160) and (tempy >= 320 and tempy <= 540):
         penguin.move(0, 0, image_list)
-        print("help!")
+        popup()
     elif tempx <= 1420:
         penguin.move(penguin.speed, 0, image_list)
         penguin.posx = tempx
