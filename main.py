@@ -96,7 +96,7 @@ def up(event):
     #Go through array of respective direction and add it to the new array
     loop(image_list, walkN)
     #
-    if tempx >= 840 and tempx <= 1160 and tempy >= 320 and tempy <= 540:
+    if (tempx >= 840 and tempx <= 1160) and (tempy >= 320 and tempy <= 540):
         penguin.move(0, 0, image_list)
         print("help!")
     #Checking if the penguin is at the top of the screen
@@ -115,7 +115,7 @@ def down(event):
     image_list = []
     loop(image_list, walkS)
     #
-    if tempx >= 840 and tempx <= 1160 and tempy >= 320 and tempy <= 540:
+    if (tempx >= 840 and tempx <= 1160) and (tempy >= 320 and tempy <= 540):
         penguin.move(0, 0, image_list)
         print("help!")
     #760 is the maximum that the penguin can go downwards
@@ -130,7 +130,7 @@ def left(event):
     tempy = penguin.posy
     image_list = []
     loop(image_list, walkW)
-    if tempx >= 840 and tempx <= 1160 and tempy >= 320 and tempy <= 540:
+    if (tempx >= 840 and tempx <= 1160) and (tempy >= 320 and tempy <= 540):
         penguin.move(0, 0, image_list)
         print("help!")
     elif tempx >= 0:
@@ -144,7 +144,7 @@ def right(event):
     tempy = penguin.posy
     image_list = []
     loop(image_list, walkE)
-    if tempx >= 880 and tempx <= 1160 and tempy >= 320 and tempy <= 540:
+    if (tempx >= 840 and tempx <= 1160) and (tempy >= 320 and tempy <= 540):
         penguin.move(0, 0, image_list)
         print("help!")
     elif tempx <= 1420:
