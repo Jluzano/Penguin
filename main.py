@@ -8,6 +8,7 @@ img2 = ImageTk.PhotoImage(img)
 canvas = Canvas(root)
 canvas.pack(fill="both", expand=TRUE)
 canvas.create_image(0, 0, image = img2, anchor="nw")
+check = FALSE
 
 #Arrays to store images for penguin sprites
 idle = ["idle/0.png", "idle/1.png", "idle/2.png", "idle/3.png", "idle/4.png", 
@@ -67,8 +68,16 @@ class Penguin:
         self.update_sprite()
         self.isIdle = TRUE
 
+    #Checking if the penguin is moving or not
+    def animate_idle(self):
+        if self.isIdle:
+            self.update_sprite()
+        #Repeat this every half a second
+        root.after(500, self.animate_idle)
+
 #Declaring Penguin object at (0, 0)
 penguin = Penguin(canvas, 0, 0, [ImageTk.PhotoImage(Image.open(image)) for image in idle])
+penguin2 = Penguin(canvas, 1000, 420, [ImageTk.PhotoImage(Image.open(image)) for image in idle])
 
 #Function to convert the arrays of images into PhotoImages
 #Also to reduce lines of code since its used in all 4 movement functions
@@ -80,61 +89,73 @@ def loop(array, direction):
 
 def up(event):
     #Temporary variable for location checking
-    temp = penguin.posy - penguin.speed
+    tempx = penguin.posx
+    tempy = penguin.posy - penguin.speed
     #Array of new images
     image_list = []
     #Go through array of respective direction and add it to the new array
     loop(image_list, walkN)
+    #
+    if tempx >= 840 and tempx <= 1160 and tempy >= 320 and tempy <= 540:
+        penguin.move(0, 0, image_list)
+        print("help!")
     #Checking if the penguin is at the top of the screen
-    if temp >= 0:
+    elif tempy >= 0:
         #Moving the penguin
         penguin.move(0, -penguin.speed, image_list)
-        penguin.posy = temp
+        penguin.posy = tempy
         #Displays the penguin's updated position
         print("x: " + str(penguin.posx) + "\ty: " + str(penguin.posy))
     #Idle animation plays
     penguin.isIdle = TRUE
 
 def down(event):
-    temp = penguin.posy + penguin.speed
+    tempx = penguin.posx
+    tempy = penguin.posy + penguin.speed
     image_list = []
     loop(image_list, walkS)
+    #
+    if tempx >= 840 and tempx <= 1160 and tempy >= 320 and tempy <= 540:
+        penguin.move(0, 0, image_list)
+        print("help!")
     #760 is the maximum that the penguin can go downwards
-    if temp <= 760:
+    elif tempy <= 760:
         penguin.move(0, penguin.speed, image_list)
-        penguin.posy = temp
+        penguin.posy = tempy
         print("x: " + str(penguin.posx) + "\ty: " + str(penguin.posy))
     penguin.isIdle = TRUE
 
 def left(event):
-    temp = penguin.posx - penguin.speed
+    tempx = penguin.posx - penguin.speed
+    tempy = penguin.posy
     image_list = []
     loop(image_list, walkW)
-    if temp >= 0:
+    if tempx >= 840 and tempx <= 1160 and tempy >= 320 and tempy <= 540:
+        penguin.move(0, 0, image_list)
+        print("help!")
+    elif tempx >= 0:
         penguin.move(-penguin.speed, 0, image_list)
-        penguin.posx = temp
+        penguin.posx = tempx
         print("x: " + str(penguin.posx) + "\ty: " + str(penguin.posy))
     penguin.isIdle = TRUE
 
 def right(event):
-    temp = penguin.posx + penguin.speed
+    tempx = penguin.posx + penguin.speed
+    tempy = penguin.posy
     image_list = []
     loop(image_list, walkE)
-    if temp <= 1420:
+    if tempx >= 880 and tempx <= 1160 and tempy >= 320 and tempy <= 540:
+        penguin.move(0, 0, image_list)
+        print("help!")
+    elif tempx <= 1420:
         penguin.move(penguin.speed, 0, image_list)
-        penguin.posx = temp
+        penguin.posx = tempx
         print("x: " + str(penguin.posx) + "\ty: " + str(penguin.posy))
     penguin.isIdle = TRUE
 
-#Checking if the penguin is moving or not
-def animate_idle():
-    if penguin.isIdle:
-        penguin.update_sprite()
-    #Repeat this every half a second
-    root.after(500, animate_idle)
-
 #Penguin starts out in the idle animation
-animate_idle()
+penguin.animate_idle()
+penguin2.animate_idle()
 
 #Stretches the background to fit the window height + width
 root.geometry('{}x{}'.format(img2.width(), img2.height()))
